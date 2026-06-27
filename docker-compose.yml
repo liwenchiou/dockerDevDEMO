@@ -1,30 +1,45 @@
-version: '3.8'
-
 services:
-  my-mongodb:
-    image: mongo:latest
-    container_name: my-mongodb
+  myapp:                 # 第一個服務名稱，這裡命名為 myapp
+    build: aa771117/dockercomposetest             # 告訴 Docker Compose：請在「當前目錄 (.)」尋找 Dockerfile 來打包成映像檔並執行。
+    restart: always      # 無論是當機、發生錯誤退出或重新開機，都自動重新啟動這個容器。
     volumes:
+      # 將主機上的 nodejsdata 這個 Volume 掛載到容器內的 /usr/local/app/dist 資料夾。
+      # 這樣就算容器被刪除，這個資料夾裡的資料依然會被保留下來。
+      - nodejsdata:/usr/local/app/dist
+    depends_on:
+      # 設定依賴關係。Docker 會確保先啟動 MONGODB 服務後，才啟動這個 myapp 服務。
+      - MONGODB
+    environment:
+      # 傳入環境變數給容器。
+      # 這裡把 MongoDB 的連線網址設為 mongodb://MONGODB/mydatabase。
+      # 注意：在同一個 Docker Network 中，我們可以直接用服務名稱（MONGODB）來作為 IP 連線。
+      #- MONGODB_URL=mongodb://MONGODB/mydatabase
+      - MONGODB_URL=mongodb://MONGODB/mydatabase
+    networks:
+      # 讓這個服務加入名為 mynetwork 的虛擬網路，這樣它才能與資料庫互相溝通。
+      - mynetwork
+    ports:
+      # 將本機電腦（Host）的 3000 port 對應到容器內（Container）的 3000 port。
+      # 這讓你可以打開瀏覽器輸入 http://localhost:3000 來存取你的網頁。
+      - "3000:3000"
+
+  MONGODB:               # 第二個服務名稱，用來運行資料庫
+    restart: always      # 同樣設定為自動重新啟動。
+    image: mongo         # 這次不自己 build，而是直接從 Docker Hub 下載官方的 mongo 映像檔來跑。
+    volumes:
+      # 把資料庫的儲存路徑（/data/db）掛載到名為 mongodbdata 的 Volume 裡。
+      # 這是極度重要的設定，能確保即使重啟或刪除資料庫容器，資料也不會遺失！
       - mongodbdata:/data/db
     networks:
-      - my-network
+      # 一樣加入 mynetwork，讓 myapp 可以連線過來。
+      - mynetwork
 
-  node-app:
-    image: casper723/2024-node-course-express-mongo
-    container_name: node-app
-    ports:
-      - "3000:3000"
-    environment:
-      MONGODB_URL: ${COMPOSE_DB_URL}
-      # - MONGODB_URL=mongodb://my-mongodb/mydatabase
-    depends_on:
-      - my-mongodb
-    networks:
-      - my-network
-
-volumes:
-  mongodbdata:
+# 以下是在整個專案中要建立的「資源清單」
+# Docker Compose 會先建立這裡定義的資源，再把它們分配給上面的 services 使用
 
 networks:
-  my-network:
-    driver: bridge
+  mynetwork:             # 宣告一個專屬的虛擬內部網路，名為 mynetwork。Docker 預設會建立一個橋接網路。
+
+volumes:
+  nodejsdata:            # 宣告一個名為 nodejsdata 的儲存空間 (對應 myapp 裡面的掛載)
+  mongodbdata:           # 宣告一個名為 mongodbdata 的儲存空間 (對應資料庫的掛載)
