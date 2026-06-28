@@ -1,16 +1,17 @@
 // db.js
+const { Sequelize } = require('sequelize');
 const dotenv = require('dotenv');
 dotenv.config();
 
-console.log(process.env.MONGODB_URL);
-const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGODB_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+console.log('DB URL:', process.env.DATABASE_URL);
+
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
+  logging: false,
 });
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB 連接錯誤：'));
-db.once('open', function () {
-  console.log('MongoDB 連接成功');
-});
+sequelize.authenticate()
+  .then(() => console.log('PostgreSQL 連接成功'))
+  .catch((err) => console.error('PostgreSQL 連接錯誤：', err));
+
+module.exports = sequelize;

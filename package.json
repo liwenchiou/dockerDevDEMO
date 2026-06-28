@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "dev": "concurrently \"npm run watch:css\" \"nodemon ./bin/www\"",
+    "watch:css": "tailwindcss -i ./public/stylesheets/input.css -o ./public/stylesheets/style.css --watch",
+    "build:css": "tailwindcss -i ./public/stylesheets/input.css -o ./public/stylesheets/style.css"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -12,7 +15,16 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
-    "mongoose": "^8.3.3",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "pg": "^8.22.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.8"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.5.2",
+    "concurrently": "^9.2.3",
+    "nodemon": "^3.1.14",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.19"
   }
 }

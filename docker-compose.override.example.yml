@@ -1,0 +1,13 @@
+# ==========================================
+# [本地開發專屬設定]
+# 這個檔案只會留在你的本機電腦，不會上傳到 GitHub (.gitignore)
+# 當你在本地執行 docker compose up -d 時，Docker 會自動拿這裡的設定去「覆蓋」原本的設定！
+# ==========================================
+services:
+  myapp:
+    # 覆蓋指令：改用 nodemon
+    command: npm run dev
+    volumes:
+      # 覆蓋掛載：把本地資料夾掛載進去
+      - ./:/usr/local/app
+      - /usr/local/app/node_modules

@@ -1,9 +1,15 @@
 // models/TextData.js
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { DataTypes } = require('sequelize');
+const sequelize = require('../service/db');
 
-const textDataSchema = new Schema({
-  text: { type: String, required: true },
+const TextData = sequelize.define('TextData', {
+  text: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
-module.exports = mongoose.model('TextData', textDataSchema);
+// 自動建立資料表
+TextData.sync();
+
+module.exports = TextData;
