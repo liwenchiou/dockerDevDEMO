@@ -16,4 +16,8 @@
 專案裡面有附上一份超詳細的 `.doc/開發實務流程.md` 教學文件。
 只要你有裝 Docker，Clone 下來後按照步驟 `cp .env.example .env`，然後下達一鍵啟動指令 `docker compose up -d --build`，5 分鐘內就能在你的電腦上跑出完整的黑客風測試面板！
 
+📖 **想更深入了解細節？**
+如果嘗試完這個專案後，想更詳細了解背後的原理與實作細節，可以來看看我寫的 Docker 系列學習筆記喔！
+👉 [Liwen's Docker 學習筆記](https://garden.liwen.studio/docs/category/-docker-%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98)
+
 非常歡迎大家 Fork 過去玩！如果有任何優化建議或是遇到奇怪的 Bug，也歡迎直接開 Issue 跟我討論交流～🙌
