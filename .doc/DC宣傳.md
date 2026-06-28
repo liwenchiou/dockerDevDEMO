@@ -6,7 +6,8 @@
 
 🔗 **專案連結：** https://github.com/liwenchiou/dockerDevDEMO
 
-✨ **這個專案能學到什麼？（專案亮點）**
+✨ **這個專案能體驗到什麼？（主打特色：零環境安裝！）**
+🔹 **純 Docker 開發體驗**：你的本機完全不需要安裝 Node.js、PostgreSQL 或任何套件！只要有 Docker，一鍵就能建立起超順暢的全端開發環境。
 🔹 **Docker 雙棲架構 (Override 機制)**：示範如何用 `docker-compose.yml` (正式版) 搭配 `docker-compose.override.yml` (本地開發版)，做到「本地完美熱重載，雲端安全不報錯」！
 🔹 **環境變數資安實戰**：示範 `.env` 的正確用法，密碼絕對不落地，解決新手最常犯的密碼外洩問題。
 🔹 **資料持久化 (Data Persistence) 實測**：內建一個深色科技感的 UI 面板，可以直接實測 PostgreSQL 的讀寫，體驗 Docker Named Volume (保險箱) 到底是怎麼保護資料的！
