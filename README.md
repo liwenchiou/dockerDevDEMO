@@ -11,6 +11,26 @@
 - **💾 資料持久化展示**：透過 UI 介面，直接實測寫入 PostgreSQL 資料庫與 Docker Named Volume 的差異。
 - **🎨 現代化 UI**：捨棄傳統單調的範例畫面，採用深色科技感面板，清楚顯示資料庫連線 IP 與 Port。
 
+## 💡 核心概念：雙棲架構與 Override 機制
+
+本專案實踐了 Docker Compose 的「覆寫 (Override)」設計模式，解決了開發與正式環境設定衝突的痛點：
+
+1. **`docker-compose.yml` (正式版)**
+   - 這是**會被上傳到 GitHub** 的乾淨且安全的檔案。
+   - 不包含熱重載指令，預設使用 Dockerfile 中的 `npm start` 啟動。
+   - 不掛載本機資料夾，確保雲端機台執行時不會因為找不到檔案而發生錯誤。
+   - *(如需在雲端使用檔案持久化，需自行解除檔案內 `nodejsdata` 的註解)*。
+
+2. **`docker-compose.override.yml` (本地開發版)**
+   - 這是**被 `.gitignore` 隱藏**，只存在於你個人電腦上的檔案（你必須從 `example` 複製出來）。
+   - 當你在本地輸入 `docker compose up -d` 時，Docker 會自動將這個檔案裡的設定「覆蓋」到正式版上。
+   - **修改點一**：將啟動指令改為 `command: npm run dev`，啟動 `nodemon` 與 CSS 即時編譯。
+   - **修改點二**：掛載了 `volumes: - ./:/usr/local/app`，讓你在本機 VSCode 修改檔案時，容器內的程式碼能瞬間同步，實現熱重載。
+
+透過這套機制，團隊達成了**「一套代碼，本機完美熱重載開發，Push 到雲端卻能無縫安全部署」**的最高標準！
+
+---
+
 ## 🚀 快速開始 (Quick Start)
 
 只要你的電腦有安裝 [Docker Desktop](https://www.docker.com/products/docker-desktop/)，跟著以下步驟，5 分鐘內就能啟動專案！
